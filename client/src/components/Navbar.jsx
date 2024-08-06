@@ -4,16 +4,23 @@ import { useState, useEffect } from "react";
 const Navbar = () => {
     const [theme, setTheme] = useState(
         localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
-      );
-    
-      // update state on toggle
-      const handleToggle = (e) => {
+    );
+
+    // update state on toggle
+    const handleToggle = (e) => {
         if (e.target.checked) {
-          setTheme("dark");
+            setTheme("dark");
         } else {
-          setTheme("light");
+            setTheme("light");
         }
-      };
+    };
+
+    useEffect(() => {
+        localStorage.setItem("theme", theme);
+        const localTheme = localStorage.getItem("theme");
+        // add custom data-theme attribute to html tag required to update theme using DaisyUI
+        document.querySelector("html").setAttribute("data-theme", localTheme);
+    }, [theme]);
 
 
     return (
@@ -40,7 +47,9 @@ const Navbar = () => {
 
             <label className="swap swap-rotate">
                 {/* this hidden checkbox controls the state */}
-                <input type="checkbox" />
+                <input type="checkbox" onChange={handleToggle}
+              
+              checked={theme === "light" ? false : true}/>
 
                 {/* sun icon */}
                 <svg
